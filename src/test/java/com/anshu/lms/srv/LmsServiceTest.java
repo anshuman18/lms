@@ -3,36 +3,29 @@
  */
 package com.anshu.lms.srv;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.test.context.ContextConfiguration;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.anshu.lms.config.SpringApplication;
 import com.anshu.lms.db.ILmsDAO;
 import com.anshu.lms.db.LmsDAO.Filter;
 import com.anshu.lms.model.Book;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author anshumank
  *
  */
 //@RunWith(SpringJUnit4ClassRunner.class)
-@RunWith(MockitoJUnitRunner.class)
-@ContextConfiguration(classes = { SpringApplication.class })
+//@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+//@ContextConfiguration(classes = { SpringApplication.class })
 public class LmsServiceTest {
 
 	@Mock
@@ -123,7 +116,7 @@ public class LmsServiceTest {
 		String userid = "anshuman";
 		Book book = Book.builder().author("tom").isbn("xyz").category("java").title("Thinking in Java").build();
 		Mockito.when(lmsDAO.checkinBook(userid, book.getIsbn())).thenReturn(Arrays.asList(book));
-		
+
 		List<Book> books = lms.checkin(userid, book.getIsbn());
 		assertEquals(book.getIsbn(), books.get(0).getIsbn());
 	}
@@ -137,7 +130,7 @@ public class LmsServiceTest {
 		String userid = "anshuman";
 		Book book = Book.builder().author("tom").isbn("xyz").category("java").title("Thinking in Java").build();
 		Mockito.when(lmsDAO.findBy(Filter.OWNER, userid)).thenReturn(Arrays.asList(book));
-		List<Book> books =  lms.findByFilter(userid, Filter.OWNER.name(), userid);
+		List<Book> books = lms.findByFilter(userid, Filter.OWNER.name(), userid);
 		assertEquals(book.getIsbn(), books.get(0).getIsbn());
 	}
 

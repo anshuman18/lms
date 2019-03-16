@@ -16,6 +16,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,14 +35,13 @@ import com.anshu.lms.model.Book;
 @Consumes(MediaType.APPLICATION_JSON)
 public class LmsService {
 
-	private static int count = 0;
+	private static Logger log = LoggerFactory.getLogger(LmsService.class);
 
 	@Autowired
 	private ILmsDAO lmsDAO;
 
 	public LmsService() {
-		count++;
-		System.out.println("LmsService called " + count);
+		log.info("LmsService initialized!");
 	}
 
 	@POST

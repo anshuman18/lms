@@ -9,6 +9,8 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.anshu.lms.model.Book;
@@ -18,6 +20,8 @@ import com.anshu.lms.model.User;
 //@Component
 @Repository
 public class LmsDAO implements ILmsDAO {
+
+	private static Logger log = LoggerFactory.getLogger(LmsDAO.class);
 
 	public enum Filter {
 		CAT, OWNER, AUTHOR
@@ -48,6 +52,7 @@ public class LmsDAO implements ILmsDAO {
 		borrowerBooks = new HashMap<>();
 		titleBooks = new HashMap<>();
 		catBooks = new HashMap<>();
+		log.info("LmsDAO initialized");
 	}
 
 	@Override
@@ -149,6 +154,7 @@ public class LmsDAO implements ILmsDAO {
 	@Override
 	public List<Book> findBy(final Filter key, final String value) {
 
+		final long start = System.currentTimeMillis();
 		readWriteLock.readLock().lock();
 		try {
 			if (Filter.AUTHOR.equals(key)) {
@@ -164,6 +170,8 @@ public class LmsDAO implements ILmsDAO {
 
 		} finally {
 			readWriteLock.readLock().unlock();
+			long curr = System.currentTimeMillis();
+			log.info("findBy time in millis : " + (curr - start));
 		}
 	}
 
